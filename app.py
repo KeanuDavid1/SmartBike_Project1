@@ -1,6 +1,6 @@
 import time
 from RPi import GPIO
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, redirect
 # https://flask-socketio.readthedocs.io/en/latest/
 from flask_socketio import SocketIO
 from flask_cors import CORS
@@ -17,6 +17,7 @@ import threading
 app = Flask(__name__)
 CORS(app)
 socketio = SocketIO(app)
+SESSION_TYPE = 'redis'
 
 # modules / classes
 conn = Database(app=app, user='mctkeanu', password='mctkeanu147963$$0', db='smartbike_db')
@@ -35,6 +36,7 @@ led_voor = 27
 led_achter = 17
 
 current_user = "0"
+logged_in_users = {}
 
 
 def setup():
@@ -182,18 +184,59 @@ v = threading.Thread(target=get_gps_values)
 v.start()
 
 # Custom endpoint
-endpoint = '/api/v1'
+endpoint = '/api/smartbike'
+
+
+@app.route(endpoint + "/graph-data-speed", methods=["GET"])
+def get_data_graph():
+    user = '0'
+    for rfid, ip in logged_in_users.items():
+        if ip == request.remote_addr:
+            user = rfid
+    data = conn.get_data('Select avg(`Values`) as "Values", Date from datahistory '
+                         'where TypeSensor like %s '
+                         'and User_RFID like %s '
+                         'group by day(Date)',
+                         ["3", user])
+
+    return jsonify(data), 200
+
+
+@app.route(endpoint + "/graph-data-time", methods=["GET"])
+def get_data_graph_time():
+    user = '0'
+    for rfid, ip in logged_in_users.items():
+        if ip == request.remote_addr:
+            user = rfid
+    data = conn.get_data('Select Date, `Values` from datahistory '
+                         'where User_RFID like %s '
+                         'and `Values` between %s and %s ', [user, 'IN', 'OUT'])
+    return jsonify(data), 200
+
+
+@app.route(endpoint + "/graph-data-gps", methods=["GET"])
+def get_data_graph_gps():
+    data = conn.get_data('Select `Values` from datahistory '
+                         'where User_RFID like %s '
+                         'and TypeSensor like %s '
+                         'order by date desc '
+                         'limit 2', ["0", '2'])
+    return jsonify(data), 200
 
 
 @app.route(endpoint + "/account-login", methods=["POST", "GET"])
 def login_data():
-    data = conn.get_data('Select * from user where Email like %s and Password like %s',
-                         [request.form["email"], request.form["password"]])
-    print(data)
-    if data[0] is not None:
-        return jsonify(message=data), 200
-    else:
-        return jsonify(message="Error: E-mailadres of wachtwoord verkeerd"), 204
+    json_data = request.get_json()
+    if request.method == "POST":
+        data = conn.get_data('Select * from user where Email like %s and Password like %s',
+                             [request.form["email"], request.form["password"]])
+        print(data)
+        try:
+            if data[0] is not None:
+                logged_in_users[data[0].get('RFID')] = request.remote_addr
+                return redirect("http://192.168.0.177/data.html", code=200)
+        except IndexError:
+            return jsonify(message="Error: E-mailadres of wachtwoord verkeerd"), 204
 
 
 @socketio.on("change_status_led")
