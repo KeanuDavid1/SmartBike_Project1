@@ -99,7 +99,7 @@ def get_gps_values():
                 print(msg)
                 valueX = msg.latitude
                 valueY = msg.longitude
-                print("Current location: {0}°, {1}°".format(valueY, valueX))
+                # print("Current location: {0}°, {1}°".format(valueY, valueX))
                 conn.set_data('Insert into datahistory '
                               'values (null, null, %s, (select rfid from user where RFID like %s), '
                               '(select idSensoren from sensoren where idSensoren like %s))',
@@ -183,6 +183,9 @@ x.start()
 v = threading.Thread(target=get_gps_values)
 v.start()
 
+# API -----------------------
+
+
 # Custom endpoint
 endpoint = '/api/smartbike'
 
@@ -190,7 +193,7 @@ endpoint = '/api/smartbike'
 @app.route(endpoint + "/graph-data-speed", methods=["GET"])
 def get_data_graph():
     user = '0'
-    for rfid, ip in logged_in_users.items():
+    for ip, rfid in logged_in_users.items():
         if ip == request.remote_addr:
             user = rfid
     data = conn.get_data('Select avg(`Values`) as "Values", Date from datahistory '
@@ -198,14 +201,14 @@ def get_data_graph():
                          'and User_RFID like %s '
                          'group by day(Date)',
                          ["3", user])
-
+    print(logged_in_users)
     return jsonify(data), 200
 
 
 @app.route(endpoint + "/graph-data-time", methods=["GET"])
 def get_data_graph_time():
     user = '0'
-    for rfid, ip in logged_in_users.items():
+    for ip, rfid in logged_in_users.items():
         if ip == request.remote_addr:
             user = rfid
     data = conn.get_data('Select Date, `Values` from datahistory '
@@ -224,20 +227,82 @@ def get_data_graph_gps():
     return jsonify(data), 200
 
 
+@app.route(endpoint + "/extra-info-avgspeed", methods=["GET"])
+def get_avg_speed():
+    user = '0'
+    for ip, rfid in logged_in_users.items():
+        if ip == request.remote_addr:
+            user = rfid
+    data = conn.get_data('select avg(`Values`) as "avg" from datahistory '
+                         'where TypeSensor like %s '
+                         'and User_RFID like %s', ["3", user])
+    return jsonify(data), 200
+
+
+@app.route(endpoint + "/extra-info-maxspeed", methods=["GET"])
+def get_max_speed():
+    user = '0'
+    for ip, rfid in logged_in_users.items():
+        if ip == request.remote_addr:
+            user = rfid
+    data = conn.get_data('select max(`Values`) as "max" from datahistory '
+                         'where TypeSensor like %s '
+                         'and User_RFID like %s', ["3", user])
+    return jsonify(data), 200
+
+
+# Account-login API ---------------------------------------
+
+
 @app.route(endpoint + "/account-login", methods=["POST", "GET"])
 def login_data():
-    json_data = request.get_json()
     if request.method == "POST":
         data = conn.get_data('Select * from user where Email like %s and Password like %s',
                              [request.form["email"], request.form["password"]])
-        print(data)
         try:
             if data[0] is not None:
-                logged_in_users[data[0].get('RFID')] = request.remote_addr
-                return redirect("http://192.168.0.177/data.html", code=200)
+                print("User gevonden in database.")
+                if logged_in_users:
+                    print("Ingelogde users gevonden")
+                    for ip, rfid in logged_in_users.items():
+                        print(rfid, ip)
+                        if ip == request.remote_addr and rfid != data[0].get('RFID'):
+                            print("Dubble entry")
+                            return jsonify(message="Error: Er is al een andere "
+                                                   "user ingelogd op jouw IP-adres"), 204
+                        else:
+                            logged_in_users[request.remote_addr] = data[0].get('RFID')
+                            print(logged_in_users)
+
+                            return redirect("http://192.168.0.177/data.html", code=200)
+                else:
+                    print("Geen users ingelogd")
+                    logged_in_users[request.remote_addr] = data[0].get('RFID')
+                    print(logged_in_users)
+
+                    return redirect("http://192.168.0.177/data.html", code=200)
         except IndexError:
             return jsonify(message="Error: E-mailadres of wachtwoord verkeerd"), 204
 
+
+# Account page API -------------------------------------------------
+
+@app.route(endpoint + "/user/update", methods=["PUT"])
+def post_user_date_update():
+    user = ''
+    for rfid, ip in logged_in_users.items():
+        if ip == request.remote_addr:
+            user = rfid
+    json_data = request.get_json()
+    if request.method == "PUT":
+        conn.set_data('Update user set Name = %s, FirstName = %s, Email = %s, Password = %s '
+                      'where RFID = %s',
+                      [json_data['Fnaam'], json_data['Vnaam'], json_data['Email'], json_data['Password'],
+                       user])
+        return jsonify(message="Gegevens zijn aangepast"), 200
+
+
+# Socketio --------------------------------------------------
 
 @socketio.on("change_status_led")
 def power_button():
