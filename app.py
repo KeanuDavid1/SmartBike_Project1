@@ -28,7 +28,6 @@ adc = mcp3008()
 # extra
 ips = check_output(['hostname', '--all-ip-addresses'])
 lcd.send_message(str(ips).split(' ')[0].lstrip("\\b\'"))
-print(ips)
 
 # python3.5 /home/keanu/tmp/pycharm_project_301/app.py
 
@@ -274,13 +273,13 @@ def login_data():
                             logged_in_users[request.remote_addr] = data[0].get('RFID')
                             print(logged_in_users)
 
-                            return redirect("http://192.168.0.177/data.html", code=200)
+                            return redirect(str(ips).split(' ')[0].lstrip("\\b\'") + "/data.html", code=200)
                 else:
                     print("Geen users ingelogd")
                     logged_in_users[request.remote_addr] = data[0].get('RFID')
                     print(logged_in_users)
 
-                    return redirect("http://192.168.0.177/data.html", code=200)
+                    return redirect(str(ips).split(' ')[0].lstrip("\\b\'") + "/data.html", code=200)
         except IndexError:
             return jsonify(message="Error: E-mailadres of wachtwoord verkeerd"), 204
 
@@ -290,7 +289,7 @@ def login_data():
 @app.route(endpoint + "/user/update", methods=["PUT"])
 def post_user_date_update():
     user = ''
-    for rfid, ip in logged_in_users.items():
+    for ip, rfid in logged_in_users.items():
         if ip == request.remote_addr:
             user = rfid
     json_data = request.get_json()
@@ -300,6 +299,19 @@ def post_user_date_update():
                       [json_data['Fnaam'], json_data['Vnaam'], json_data['Email'], json_data['Password'],
                        user])
         return jsonify(message="Gegevens zijn aangepast"), 200
+
+
+@app.route(endpoint + "/user", methods=["GET"])
+def get_user_data():
+    user = ''
+    for ip, rfid in logged_in_users.items():
+        if ip == request.remote_addr:
+            user = rfid
+            print(user)
+    print(logged_in_users)
+    if request.method == "GET":
+        data = conn.get_data("Select * from user where RFID like %s", [user])
+        return jsonify(data), 200
 
 
 # Socketio --------------------------------------------------
