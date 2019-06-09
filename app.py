@@ -137,8 +137,10 @@ def get_rfid_tag():
                     get_user = conn.get_data("select RFID from user where RFID like %s", [current_user])
                     if get_user[0]:
                         print("Gebruiker ingescand")
+                        socketio.emit("RFID-tag", str(code).lstrip(" "))
                 except IndexError:
                     print("Onbekende gebruiker ingescand")
+                    socketio.emit("RFID-tag", str(code).lstrip(" "))
                     current_user = "0"
 
                 if current_user != "0":
@@ -250,10 +252,10 @@ def get_max_speed():
     return jsonify(data), 200
 
 
-# Account-login API ---------------------------------------
+# Account-login/aanmaken API ---------------------------------------
 
 
-@app.route(endpoint + "/account-login", methods=["POST", "GET"])
+@app.route(endpoint + "/account-login", methods=["POST"])
 def login_data():
     if request.method == "POST":
         data = conn.get_data('Select * from user where Email like %s and Password like %s',
@@ -273,15 +275,45 @@ def login_data():
                             logged_in_users[request.remote_addr] = data[0].get('RFID')
                             print(logged_in_users)
 
-                            return redirect(str(ips).split(' ')[0].lstrip("\\b\'") + "/data.html", code=200)
+                            return redirect("http://" + str(ips).split(' ')[0].lstrip("\\b\'") + "/data.html", code=200)
                 else:
                     print("Geen users ingelogd")
                     logged_in_users[request.remote_addr] = data[0].get('RFID')
                     print(logged_in_users)
 
-                    return redirect(str(ips).split(' ')[0].lstrip("\\b\'") + "/data.html", code=200)
+                    return redirect("http://" + str(ips).split(' ')[0].lstrip("\\b\'") + "/data.html", code=200)
         except IndexError:
             return jsonify(message="Error: E-mailadres of wachtwoord verkeerd"), 204
+
+
+@app.route(endpoint + "/user/account-aanmaken", methods=["POST"])
+def create_account():
+    json_data = request.get_json()
+    if request.method == "POST":
+        data = conn.get_data('Select * from user where RFID like %s ',
+                             [json_data["RFID"]])
+        try:
+            if data[0] is not None:
+                print("User gevonden in database.")
+                return jsonify(message="User bestaat al"), 200
+        except IndexError:
+            conn.set_data('Insert into user(rfid, name, firstname, email, Phone, password) '
+                          'values (%s, %s, %s, %s, %s, %s)',
+                          [json_data['RFID'], json_data['Fnaam'], json_data['Vnaam'], json_data['Email'],
+                           ["0"], json_data['Password']])
+            if logged_in_users:
+                for ip, rfid in logged_in_users.items():
+                    if ip == request.remote_addr and rfid != json_data['RFID']:
+                        print("Dubble entry")
+                        logged_in_users[request.remote_addr] = json_data['RFID']
+                        print("Andere user op IP: '{}' uitgelogd".format(request.remote_addr))
+                        return jsonify(message='Success!'), 200
+                    else:
+                        logged_in_users[request.remote_addr] = json_data['RFID']
+                        return jsonify(message='Success!'), 200
+            else:
+                logged_in_users[request.remote_addr] = json_data['RFID']
+                return jsonify(message='Success!'), 200
 
 
 # Account page API -------------------------------------------------
