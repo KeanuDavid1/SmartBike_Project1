@@ -30,6 +30,13 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="rpi_smartbike_thuis">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_301" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
     </serverData>
     <option name="myAutoUpload" value="ALWAYS" />
   </component>

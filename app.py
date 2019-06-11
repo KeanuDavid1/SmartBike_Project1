@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 from RPi import GPIO
 from flask import Flask, jsonify, request, redirect
 # https://flask-socketio.readthedocs.io/en/latest/
@@ -27,7 +28,10 @@ adc = mcp3008()
 
 # extra
 ips = check_output(['hostname', '--all-ip-addresses'])
-lcd.send_message(str(ips).split(' ')[0].lstrip("\\b\'"))
+if str(ips).split(' ')[0].lstrip("\\b\'") == "169.254.10.1":
+    lcd.send_message(str(ips).split(' ')[1])
+else:
+    lcd.send_message(str(ips).split(' ')[0].lstrip("\\b\'"))
 
 # python3.5 /home/keanu/tmp/pycharm_project_301/app.py
 
@@ -36,6 +40,7 @@ led_achter = 17
 
 current_user = "0"
 logged_in_users = {}
+user_lights_input = False
 
 
 def setup():
@@ -63,6 +68,12 @@ def get_value_ldr():
         status = 0
         licht_waarde = adc.read_data_ldr(0b10000000)
         # print("Licht waarde: %s" % licht_waarde)
+        global user_lights_input
+
+        if user_lights_input:
+            user_lights_input = False
+            time.sleep(30)
+
         if licht_waarde < 50:
             status = 1
         else:
@@ -71,20 +82,30 @@ def get_value_ldr():
         if status == 1 and GPIO.input(led_voor) == 0:
             GPIO.output(led_voor, GPIO.HIGH)
             GPIO.output(led_achter, GPIO.HIGH)
-            socketio.emit("data", "led aan")
+            socketio.emit("data", "Aan")
             conn.set_data("INSERT into datahistory "
                           "VALUES (null, null, %s, (select rfid from user where RFID like %s), %s)",
                           ["ON", current_user, "5"])
         elif status == 0 and GPIO.input(led_voor) == 1:
             GPIO.output(led_voor, GPIO.LOW)
             GPIO.output(led_achter, GPIO.LOW)
-            socketio.emit("data", "led uit")
+            socketio.emit("data", "Uit")
             conn.set_data("INSERT into datahistory "
                           "VALUES (null, null, %s, (select rfid from user where RFID like %s), %s)",
                           ["OFF", current_user, "5"])
 
         # print(acc.get_speed())
+
         time.sleep(5)
+
+        # ip idres check
+
+        if str(ips).split(' ')[0].lstrip("\\b\'") == "169.254.10.1":
+            lcd.init_LCD()
+            lcd.send_message(str(ips).split(' ')[1])
+        else:
+            lcd.init_LCD()
+            lcd.send_message(str(ips).split(' ')[0].lstrip("\\b\'"))
 
 
 def get_gps_values():
@@ -191,22 +212,22 @@ v.start()
 endpoint = '/api/smartbike'
 
 
-@app.route(endpoint + "/graph-data-speed", methods=["GET"])
+@app.route(endpoint + "/user/graph-data-speed", methods=["GET"])
 def get_data_graph():
     user = '0'
     for ip, rfid in logged_in_users.items():
         if ip == request.remote_addr:
             user = rfid
+            print(user)
     data = conn.get_data('Select avg(`Values`) as "Values", Date from datahistory '
                          'where TypeSensor like %s '
                          'and User_RFID like %s '
                          'group by day(Date)',
                          ["3", user])
-    print(logged_in_users)
     return jsonify(data), 200
 
 
-@app.route(endpoint + "/graph-data-time", methods=["GET"])
+@app.route(endpoint + "/user/graph-data-time", methods=["GET"])
 def get_data_graph_time():
     user = '0'
     for ip, rfid in logged_in_users.items():
@@ -215,10 +236,37 @@ def get_data_graph_time():
     data = conn.get_data('Select Date, `Values` from datahistory '
                          'where User_RFID like %s '
                          'and `Values` between %s and %s ', [user, 'IN', 'OUT'])
+    print(data)
+    total_time = 0
+    IN_time = 0
+    OUT_time = 0
+    dict_of_time = {}
+    print(data[0].get('Date'))
+    for i in range(0, len(data)):
+        # print("Getting more time...")
+        if dict_of_time:
+            pass
+        else:
+            dict_of_time[data[i].get('Date').date().strftime("%d %b")] = 'yeet'
+        print(dict_of_time)
+        date = data[i].get('Date')
+        value = data[i].get('Values')
+        if value == 'IN':
+            # print('Setting IN time!')
+            IN_time = date
+        if value == 'OUT':
+            # print('Setting OUT time!')
+            OUT_time = date
+            timediff = OUT_time - IN_time
+            if total_time == 0:
+                total_time = timediff
+            else:
+                total_time += timediff
+
     return jsonify(data), 200
 
 
-@app.route(endpoint + "/graph-data-gps", methods=["GET"])
+@app.route(endpoint + "/user/graph-data-gps", methods=["GET"])
 def get_data_graph_gps():
     data = conn.get_data('Select `Values` from datahistory '
                          'where User_RFID like %s '
@@ -228,7 +276,7 @@ def get_data_graph_gps():
     return jsonify(data), 200
 
 
-@app.route(endpoint + "/extra-info-avgspeed", methods=["GET"])
+@app.route(endpoint + "/user/extra-info-avgspeed", methods=["GET"])
 def get_avg_speed():
     user = '0'
     for ip, rfid in logged_in_users.items():
@@ -240,9 +288,9 @@ def get_avg_speed():
     return jsonify(data), 200
 
 
-@app.route(endpoint + "/extra-info-maxspeed", methods=["GET"])
+@app.route(endpoint + "/user/extra-info-maxspeed", methods=["GET"])
 def get_max_speed():
-    user = '0'
+    user = 0
     for ip, rfid in logged_in_users.items():
         if ip == request.remote_addr:
             user = rfid
@@ -252,14 +300,21 @@ def get_max_speed():
     return jsonify(data), 200
 
 
+@app.route(endpoint + '/user/logout', methods=['POST'])
+def user_logout():
+    logged_in_users.pop(request.remote_addr, None)
+    return jsonify(message="User uitgelogd"), 200
+
+
 # Account-login/aanmaken API ---------------------------------------
 
 
-@app.route(endpoint + "/account-login", methods=["POST"])
+@app.route(endpoint + "/user/login", methods=["POST"])
 def login_data():
+    json_data = request.get_json()
     if request.method == "POST":
         data = conn.get_data('Select * from user where Email like %s and Password like %s',
-                             [request.form["email"], request.form["password"]])
+                             [json_data["Email"], json_data["Password"]])
         try:
             if data[0] is not None:
                 print("User gevonden in database.")
@@ -269,21 +324,16 @@ def login_data():
                         print(rfid, ip)
                         if ip == request.remote_addr and rfid != data[0].get('RFID'):
                             print("Dubble entry")
-                            return jsonify(message="Error: Er is al een andere "
-                                                   "user ingelogd op jouw IP-adres"), 204
+                            return jsonify(message="Er is al een andere user ingelogd op jouw IP-adres"), 200
                         else:
                             logged_in_users[request.remote_addr] = data[0].get('RFID')
-                            print(logged_in_users)
-
-                            return redirect("http://" + str(ips).split(' ')[0].lstrip("\\b\'") + "/data.html", code=200)
+                            return jsonify(message='Changing user'), 200
                 else:
                     print("Geen users ingelogd")
                     logged_in_users[request.remote_addr] = data[0].get('RFID')
-                    print(logged_in_users)
-
-                    return redirect("http://" + str(ips).split(' ')[0].lstrip("\\b\'") + "/data.html", code=200)
+                    return jsonify(message='Logging in'), 200
         except IndexError:
-            return jsonify(message="Error: E-mailadres of wachtwoord verkeerd"), 204
+            return jsonify(message="E-mailadres of wachtwoord verkeerd"), 200
 
 
 @app.route(endpoint + "/user/account-aanmaken", methods=["POST"])
@@ -320,17 +370,25 @@ def create_account():
 
 @app.route(endpoint + "/user/update", methods=["PUT"])
 def post_user_date_update():
-    user = ''
+    json_data = request.get_json()
+    user = 0
     for ip, rfid in logged_in_users.items():
         if ip == request.remote_addr:
             user = rfid
-    json_data = request.get_json()
-    if request.method == "PUT":
-        conn.set_data('Update user set Name = %s, FirstName = %s, Email = %s, Password = %s '
-                      'where RFID = %s',
-                      [json_data['Fnaam'], json_data['Vnaam'], json_data['Email'], json_data['Password'],
-                       user])
-        return jsonify(message="Gegevens zijn aangepast"), 200
+    try:
+        data = conn.get_data("Select * from user where Email like %s", json_data['Email'])
+        if data[0] is not None:
+            return jsonify(message="Dit e-mailadres is al in gebruikt"), 200
+    except IndexError:
+        if user != 0:
+            if request.method == "PUT":
+                conn.set_data('Update user set Name = %s, FirstName = %s, Email = %s, Password = %s '
+                              'where RFID = %s',
+                              [json_data['Fnaam'], json_data['Vnaam'], json_data['Email'], json_data['Password'],
+                               user])
+                return jsonify(message="Gegevens zijn aangepast"), 200
+        else:
+            return jsonify(message="Je bent niet ingelogt"), 200
 
 
 @app.route(endpoint + "/user", methods=["GET"])
@@ -346,18 +404,49 @@ def get_user_data():
         return jsonify(data), 200
 
 
+@app.route(endpoint + "/user/check", methods=['GET'])
+def check_if_logged_in():
+    user = 0
+    for ip, rfid in logged_in_users.items():
+        if ip == request.remote_addr:
+            user = rfid
+    if user != 0:
+        data = conn.get_data('select * from user where RFID like %s', [user])
+        return jsonify(data), 200
+    else:
+        return jsonify(message="User niet ingelogd"), 200
+
+
 # Socketio --------------------------------------------------
 
-@socketio.on("change_status_led")
-def power_button():
-    if GPIO.input(led_voor) == 0:
+@socketio.on("change_status_led_on")
+def power_light():
+    user = 0
+    for ip, rfid in logged_in_users.items():
+        if ip == request.remote_addr:
+            user = rfid
+    if user != 0:
         GPIO.output(led_voor, GPIO.HIGH)
-        socketio.emit("data", "led aan")
+        GPIO.output(led_achter, GPIO.HIGH)
+        socketio.emit("data", "Aan")
+        global user_lights_input
+        user_lights_input = True
         conn.set_data("INSERT into datahistory "
                       "VALUES (null, null, %s, (select rfid from user where RFID like %s), %s)", ["ON", "0", "4"])
-    else:
+
+
+@socketio.on("change_status_led_off")
+def power_light_off():
+    user = 0
+    for ip, rfid in logged_in_users.items():
+        if ip == request.remote_addr:
+            user = rfid
+    if user != 0:
         GPIO.output(led_voor, GPIO.LOW)
-        socketio.emit("data", "led uit")
+        GPIO.output(led_achter, GPIO.LOW)
+        socketio.emit("data", "Uit  ")
+        global user_lights_input
+        user_lights_input = True
         conn.set_data("INSERT into datahistory "
                       "VALUES (null, null, %s, (select rfid from user where RFID like %s), %s)", ["OFF", "0", "4"])
 
