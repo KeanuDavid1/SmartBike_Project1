@@ -105,7 +105,7 @@ def get_value_ldr():
             lcd.send_message(str(ips).split(' ')[1])
         else:
             lcd.init_LCD()
-            lcd.send_message(str(ips).split(' ')[0].lstrip("\\b\'"))
+            lcd.send_message(str(ips).split(' ')[2].lstrip("\\b\'"))
 
 
 def get_gps_values():
@@ -116,10 +116,10 @@ def get_gps_values():
             # print("Recieved GPS data: %s" % line)
             if str(line).find('GPGGA') != -1:
                 msg = pynmea2.parse(str(line).lstrip('b\'').rstrip('\\r\\n\''))
-                print(msg)
                 valueX = msg.latitude
                 valueY = msg.longitude
-                # print("Current location: {0}°, {1}°".format(valueY, valueX))
+                print(msg)
+                print("Current location: {0}°, {1}°".format(valueY, valueX))
                 conn.set_data('Insert into datahistory '
                               'values (null, null, %s, (select rfid from user where RFID like %s), '
                               '(select idSensoren from sensoren where idSensoren like %s))',
@@ -171,6 +171,9 @@ def get_rfid_tag():
                                                     "order by Date desc limit 1", [current_user])
                     try:
                         if get_latest_data[0].get("Values") == "IN":
+                            lcd.second_row()
+                            lcd.send_message("User OUT")
+                            time.sleep(1)
                             print("User OUT")
                             conn.set_data('Insert into datahistory '
                                           'values (null, null, %s, (select rfid from user where RFID like %s), '
@@ -180,6 +183,9 @@ def get_rfid_tag():
 
                         elif get_latest_data[0].get("Values") == "OUT":
                             print("User IN")
+                            lcd.second_row()
+                            lcd.send_message("User IN")
+                            time.sleep(1)
                             conn.set_data('Insert into datahistory '
                                           'values (null, null, %s, (select rfid from user where RFID like %s), '
                                           '(select idSensoren from sensoren where idSensoren like %s))',
@@ -238,32 +244,33 @@ def get_data_graph_time():
                          'and `Values` between %s and %s ', [user, 'IN', 'OUT'])
     print(data)
     total_time = 0
-    IN_time = 0
-    OUT_time = 0
     dict_of_time = {}
+    day = ""
     print(data[0].get('Date'))
     for i in range(0, len(data)):
         # print("Getting more time...")
-        if dict_of_time:
-            pass
-        else:
-            dict_of_time[data[i].get('Date').date().strftime("%d %b")] = 'yeet'
-        print(dict_of_time)
         date = data[i].get('Date')
         value = data[i].get('Values')
         if value == 'IN':
             # print('Setting IN time!')
+            global IN_time
             IN_time = date
         if value == 'OUT':
             # print('Setting OUT time!')
+            global OUT_time
             OUT_time = date
             timediff = OUT_time - IN_time
-            if total_time == 0:
-                total_time = timediff
+            print(timediff.seconds)
+            if day in dict_of_time:
+                print("Adding time to day...")
+                dict_of_time[data[i].get('Date').date().strftime("%d %b")] += timediff.seconds
             else:
-                total_time += timediff
-
-    return jsonify(data), 200
+                print("Adding day to dictionary...")
+                dict_of_time[data[i].get('Date').date().strftime("%d %b")] = timediff.seconds
+                print(dict_of_time)
+            total_time += timediff.seconds
+    sorted_dict = sorted(dict_of_time.items())
+    return jsonify(sorted_dict), 200
 
 
 @app.route(endpoint + "/user/graph-data-gps", methods=["GET"])
