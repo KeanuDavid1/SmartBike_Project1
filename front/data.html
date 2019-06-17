@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+  <!--<![endif]-->
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>SmartBike</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
+      integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.js" integrity="sha256-vyehT44mCOPZg7SbqfOZ0HNYXjPKgBCaqxBkW3lh6bg=" crossorigin="anonymous"></script>
+    <script src="js/data.js"></script>
+    <script src="js/dataHandler.js"></script>
+    <script src='js/ip-adres.js'></script>
+
+    <link rel="stylesheet" href="css/screen.css" />
+    <link rel="stylesheet" href="css/normalize.css" />
+  </head>
+  <body>
+    <div class="o-row">
+
+
+      <div class="o-section o-section--xl">
+      <div class="o-container--data-nav">
+        <div class="o-layout">
+          <div class="c-header">
+            <div class="c-header__logo">
+              <h2 class="c-logo">Smartbike</h2></div>
+            <div class="c-header__nav">
+              <nav class="c-nav">
+                <ul class="o-list c-nav_list o-layout o-layout--justify-end">
+                  <li class="c-nav__item o-layout__item u-1-of-5-bp3">
+                    <a href="data.html" class="c-nav__link u-text-right">Data</a>
+                  </li>
+                  <li class="c-nav__item o-layout__item u-1-of-5-bp3">
+                    <a href="account.html" class="c-nav__link u-text-right">Account</a>
+                  </li>
+                  <li class="c-nav__item o-layout__item u-1-of-5-bp3">
+                    <a class="c-nav__link u-text-right" id="logout-button" onmouseover="" style="cursor: pointer;">Uitloggen</a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="o-section o-section--xl">
+      <div class="o-container--data u-mb-xl">
+        <div class="o-layout">
+          <div class="o-layout__item" id="current-user"><p>Niet ingelogd</p></div>
+          <div class="c-graph-data o-layout__item u-mb-xl">
+            <canvas id="myChart">
+              
+            </canvas>
+          </div>
+        </div>
+        <div class="o-layout o-layout--justify-center">
+            <div class="o-layout__item u-1-of-6-bp1 u-text-center c-graph-data__selection" id="speed">Snelheid</div>
+            <div class="o-layout__item u-1-of-6-bp1 u-text-center c-graph-data__selection" id="time">Tijd</div>
+            <div class="o-layout__item u-1-of-6-bp1 u-text-center c-graph-data__selection" id="gps">GPS</div>
+          </div>
+      </div>
+
+    </div>
+
+
+    </div>
+    <div class="o-row">
+      <div class="o-section">
+        <div class="o-container--data">
+        <div class="o-layout o-layout--justify-space-between u-mb-xl">
+          <div class="o-layout__item u-1-of-1"><h3>Extra Info</h3></div>
+          <div class="o-layout__item u-3-of-9-bp3 o-blue-bg u-text-center"><p class="c-text-info">Gemiddelde snelheid (km/h)</p><p class="c-text-data" id="avgspeed">21</p></div>
+          <div class="o-layout__item u-2-of-9-bp3 o-blue-bg u-text-center">
+            <p class="c-text-info">Lichten</p><p class="c-text-data c-text-data--lights" id="lichten"></p>
+            <br>
+            <label class="switch">
+                <input type="checkbox" id="checkbox">
+                <span class="slider round"></span>
+              </label>
+          </div>
+          <div class="o-layout__item u-3-of-9-bp3 o-blue-bg u-text-center"><p class="c-text-info">Topsnelheid (km/h)</p><p class="c-text-data" id="topspeed">32</p></div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+  </body>
+</html>

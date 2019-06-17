@@ -1,0 +1,1294 @@
+/*------------------------------------*\
+  #FONTS
+\*------------------------------------*/
+
+@font-face {
+  font-family: 'Ubuntu';
+  font-weight: 400;
+  src: url('../fonts/Ubuntu/Ubuntu-Regular.ttf') format('tff');
+}
+
+@font-face {
+  font-family: 'Ubuntu';
+  font-weight: 200;
+  src: url('../fonts/Ubuntu/Ubuntu-Light.ttf') format('tff');
+}
+
+@font-face {
+  font-family: 'Ubuntu';
+  font-weight: 600;
+  src: url('../fonts/Ubuntu/Ubuntu-Medium.ttf') format('tff');
+}
+
+@font-face {
+  font-family: 'Ubuntu';
+  font-weight: 700;
+  src: url('../fonts/Ubuntu/Ubuntu-Bold.ttf') format('tff');
+}
+
+/*------------------------------------*\
+  #GENERIC
+\*------------------------------------*/
+
+/*
+    Generic: Page
+    ---
+    Global page styles + universal box-sizing:
+*/
+
+html {
+  font-size: 16px;
+  line-height: 1.5;
+  font-family: 'Ubuntu', sans-serif;
+  color: #252626;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: #f7faff;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+/*
+ * Remove text-shadow in selection highlight:
+ * https://twitter.com/miketaylr/status/12228805301
+ *
+ * Customize the background color to match your design.
+ */
+
+::-moz-selection {
+  background: #2e77e6;
+  color: white;
+  text-shadow: none;
+}
+
+::selection {
+  background: #2e77e6;
+  color: white;
+  text-shadow: none;
+}
+
+/*------------------------------------*\
+  #Elements
+\*------------------------------------*/
+
+/*
+    Elements: Images
+    ---
+    Default markup for images to make them responsive
+*/
+
+img {
+  max-width: 100%;
+  vertical-align: top;
+}
+
+/*
+    Elements: typography
+    ---
+    Default markup for typographic elements
+*/
+
+h1,
+h2,
+h3 {
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 32px;
+  line-height: 48px;
+}
+
+h2 {
+  font-size: 32px;
+  line-height: 40px;
+}
+
+.t-text {
+  color: #83859e;
+}
+
+.t-text--negative {
+  color: #9c9eb8;
+}
+
+h3 {
+  font-size: 20px;
+  line-height: 30px;
+  font-weight: 200;
+}
+
+h4,
+h5,
+h6 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+p,
+ol,
+ul,
+dl,
+table,
+address,
+figure {
+}
+
+ul,
+ol {
+  padding-left: 24px;
+}
+
+li ul,
+li ol {
+  margin-bottom: 0;
+}
+
+blockquote {
+  font-style: normal;
+  font-size: 23px;
+  line-height: 32px;
+  margin: 0 0 24px;
+}
+
+blockquote * {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+figcaption {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  margin-top: 8px;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background: LightGrey;
+  margin: 0 0 24px;
+}
+
+a {
+  color: RoyalBlue;
+  transition: all 0.1s ease-in-out;
+}
+
+a:visited,
+a:active {
+  color: BlueViolet;
+}
+
+a:hover,
+a:focus {
+  color: Crimson;
+}
+
+.t-title {
+  color: #5f7cb3;
+  margin-bottom: 36px;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.t-title:visited,
+.t-title:active {
+  color: #5f7cb3;
+  text-decoration: none;
+}
+
+.t-title:hover,
+.t-title:focus {
+  color: #5f7cb3;
+  text-decoration: none;
+}
+
+/*------------------------------------*\
+  #OBJECTS
+\*------------------------------------*/
+
+.o-blue-bg {
+  height: 240px;
+  background-color: #445980;
+  margin-bottom: 24px;
+}
+
+.o-hr {
+  display: block;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  margin-left: auto;
+  margin-right: auto;
+  border-style: inset;
+  border-width: 1px;
+  height: 1px;
+  width: 352px;
+  border: #445980;
+}
+
+.o-text-input-field {
+  margin: 0 auto;
+  padding: 0;
+  width: 322px;
+  height: 40px;
+  border-radius: 10px;
+  border-color: #d4e3ff;
+  text-align: left;
+  border-style: solid;
+}
+
+@media (min-width: 768px) {
+  .o-text-input-field {
+    width: 352px;
+  }
+}
+
+.o-button-center {
+  text-align: center;
+  margin: 0 auto;
+}
+
+.o-margin-button {
+  margin: auto;
+  margin-top: 24px;
+}
+
+/*
+    Objects: Row
+    ---
+    Creates a horizontal row that stretches the viewport and adds padding around children
+*/
+
+.o-row {
+  position: relative;
+  display: flex;
+  padding: 24px;
+  flex-direction: column;
+}
+
+/* size modifiers */
+
+.o-row--lg {
+  padding-top: 48px;
+  padding-bottom: 24px;
+}
+
+.o-row--xl {
+  padding-top: 72px;
+  padding-bottom: 48px;
+}
+
+@media (min-width: 1112px) {
+  .o-row {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
+  .o-row--md {
+    padding-top: 48px;
+    padding-bottom: 24px;
+  }
+
+  .o-row--lg {
+    padding-top: 72px;
+    padding-bottom: 48px;
+  }
+}
+
+@media (min-width: 992px) {
+  .o-row--xl {
+    padding-top: 96px;
+    padding-bottom: 72px;
+  }
+}
+
+/*
+    Objects: Container
+    ---
+    Creates a horizontal container that sets de global max-width
+*/
+
+.o-container {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 90em; /* 90 * 16px = 1440px */
+}
+
+.o-container--account {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 100%;
+  background-color: #f7faff;
+  padding-top: 0;
+  padding-bottom: 48px;
+}
+
+.o-container--data {
+  margin-left: auto;
+  margin-right: auto;
+  width: 69em;
+  max-width: 100%;
+  padding-bottom: 0px;
+}
+
+@media (min-width: 768px) {
+  .o-container--data {
+    padding-bottom: 48px;
+  }
+}
+
+.o-container--data-nav {
+  margin-left: auto;
+  margin-right: auto;
+  width: 1112px;
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .o-container--account {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    max-width: 34em; /* 90 * 16px = 1440px */
+    background-color: #f7faff;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 0 20px;
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+}
+
+/*
+    Objects: section
+    ---
+    Creates vertical whitespace between adjacent sections inside a row
+*/
+
+.o-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.o-section + .o-section {
+  margin-top: 48px;
+}
+
+@media (min-width: 768px) {
+  .o-section--lg + .o-section--lg,
+  .o-section--xl + .o-section--xl {
+    margin-top: 48px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .o-section--xl + .o-section--xl {
+    margin-top: 96px;
+  }
+}
+
+/*
+    Objects: Layout
+    ---
+    The layout object provides us with a column-style layout system. This object
+    contains the basic structural elements, but classes should be complemented
+    with width utilities
+*/
+
+.o-layout {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.o-layout__item {
+  width: 100%;
+}
+
+.o-layout__item--account-input {
+  width: 352px;
+}
+
+/* gutter modifiers, these affect o-layout__item too */
+
+.o-layout--gutter {
+  margin: 0 -12px;
+}
+
+.o-layout--gutter > .o-layout__item {
+  padding: 0 12px;
+}
+
+.o-layout--gutter-sm {
+  margin: 0 -6px;
+}
+
+.o-layout--gutter-sm > .o-layout__item {
+  padding: 0 6px;
+}
+
+.o-layout--gutter-lg {
+  margin: 0 -24px;
+}
+
+.o-layout--gutter-lg > .o-layout__item {
+  padding: 0 24px;
+}
+
+.o-layout--gutter-xl {
+  margin: 0 -48px;
+}
+
+.o-layout--gutter-xl > .o-layout__item {
+  padding: 0 48px;
+}
+
+/* reverse horizontal row modifier */
+
+.o-layout--row-reverse {
+  flex-direction: row-reverse;
+}
+
+/* Horizontal alignment modifiers*/
+
+.o-layout--justify-start {
+  justify-content: flex-start;
+}
+
+.o-layout--justify-end {
+  justify-content: flex-end;
+}
+
+.o-layout--justify-center {
+  justify-content: center;
+}
+
+.o-layout--justify-space-around {
+  justify-content: space-around;
+}
+
+.o-layout--justify-space-evenly {
+  justify-content: space-evenly;
+}
+
+.o-layout--justify-space-between {
+  justify-content: space-between;
+}
+
+/* Vertical alignment modifiers */
+
+.o-layout--align-start {
+  align-items: flex-start;
+}
+
+.o-layout--align-end {
+  align-items: flex-end;
+}
+
+.o-layout--align-center {
+  align-items: center;
+}
+
+.o-layout--align-baseline {
+  align-items: baseline;
+}
+
+/* Vertical alignment modifiers that only work if there is more than one flex item */
+
+.o-layout--align-content-start {
+  align-content: start;
+}
+
+.o-layout--align-content-end {
+  align-content: end;
+}
+
+.o-layout--align-content-center {
+  align-content: center;
+}
+
+.o-layout--align-content-space-around {
+  align-content: space-around;
+}
+
+.o-layout--align-content-space-between {
+  align-content: space-between;
+}
+
+/*
+    Objects: List
+    ---
+    Small reusable object to remove default list styling from lists
+*/
+
+.o-list {
+  list-style: none;
+  padding: 0;
+}
+
+/*
+    Object: Button reset
+    ---
+    Small button reset object
+*/
+
+.o-button-reset {
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+  background: transparent;
+
+  /* inherit font & color from ancestor */
+  color: inherit;
+  font: inherit;
+
+  /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
+  line-height: normal;
+
+  /* Corrects font smoothing for webkit */
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+
+  /* Corrects inability to style clickable `input` types in iOS */
+  -webkit-appearance: none;
+}
+
+/*------------------------------------*\
+  #COMPONENTS
+\*------------------------------------*/
+
+/* 
+
+component: switch toggle
+
+*/
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #2e77e6;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* 
+
+component: graph
+
+*/
+
+.c-graph-data {
+  width: 100%;
+  max-width: 1112px;
+  background-color: #f7faff;
+  height: 220px;
+  padding: 24px 0;
+}
+
+@media (min-width: 480px) {
+  .c-graph-data {
+    height: 360px;
+    padding: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .c-graph-data {
+    height: 480px;
+    padding: 8px;
+  }
+}
+
+@media (min-width: 992px) {
+  .c-graph-data {
+    height: 640px;
+    padding: 16px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 0 20px;
+  }
+}
+
+.c-graph-data__selection {
+  font-size: 20px;
+  font-weight: 200;
+  padding-bottom: 24px;
+}
+
+@media (min-width: 768px) {
+  .c-graph-data__selection:hover,
+  .c-graph-data__selection:focus {
+    border-bottom: 1px solid #445980;
+  }
+}
+
+.c-text-info {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 200;
+  padding-top: 48px;
+}
+
+.c-text-data {
+  color: #fff;
+  font-size: 48px;
+  font-weight: 400;
+  margin: 0;
+  margin-top: 16px;
+}
+
+.c-text-data--lights {
+  font-size: 24px;
+}
+
+/* 
+
+components: account-page
+
+*/
+
+.c-title-account-page {
+  font-size: 24px;
+  line-height: 1.5;
+  font-weight: 400;
+  margin: 16px 0;
+}
+
+.c-status-message {
+  color: #fff;
+  margin-left: 96px;
+  margin-right: 96px;
+  text-align: center;
+  background-color: rgb(236, 84, 84);
+  border-radius: 10px;
+}
+
+.c-status-message-beurs {
+  color: #fff;
+  margin: 0;
+  text-align: center;
+  border-radius: 10px;
+  background-color: #445980;
+}
+
+@media(min-width:768px){
+  .c-status-message-beurs {
+    margin-left: 96px;
+    margin-right: 96px;
+  }
+}
+
+.c-status-message-success {
+  color: #fff;
+  margin-left: 96px;
+  margin-right: 96px;
+  text-align: center;
+  background-color: green;
+  border-radius: 10px;
+}
+
+/*
+    Component: header
+    ---
+    Main header of the website
+*/
+.c-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.c-header__logo,
+.c-header__nav {
+  flex-grow: 1;
+  flex-basis: 50%;
+}
+
+.c-header__nav {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.c-header__nav--main {
+  flex-grow: 2;
+  justify-content: center;
+}
+
+.c-header__mobile-nav-trigger {
+  display: none;
+}
+
+/*
+    Component: Logo
+    ---
+    Logo of site
+*/
+
+.c-logo {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  font-weight: 400;
+}
+
+.c-logo__symbol {
+  height: inherit;
+}
+
+.c-logo__icon {
+  height: 32px;
+}
+
+@media (min-width: 768px) {
+  .c-logo__icon {
+    height: 32px;
+  }
+}
+
+/* 
+
+component: Nav
+
+*/
+
+.c-nav {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.c-nav__link {
+  text-decoration: none;
+  display: block;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.c-nav__link,
+.c-nav__link:visited,
+.c-nav__link:active {
+  color: #000;
+}
+
+.c-nav__link--meta,
+.c-nav__link--meta:visited,
+.c-nav__link--meta:active {
+  color: #000;
+}
+
+.c-nav__link:hover,
+.c-nav__link:focus {
+  color: #000;
+}
+
+.c-link-button {
+  display: inline-block;
+  text-decoration: none;
+  padding: 12px 23px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #fff;
+  background: #445980;
+  border-radius: 10px;
+  margin-bottom: 48px;
+}
+
+@media (min-width: 992px) {
+  .c-nav {
+    display: block;
+    width: 100%;
+  }
+
+  .c-nav__list {
+    display: flex;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
+  .c-nav__link {
+    padding: 8px 0;
+  }
+}
+
+.c-nav__item--right {
+  padding-right: 0;
+}
+
+.c-bg {
+  max-width: 100%;
+  background-color: #20223a;
+  color: #fff;
+  padding: 96px 0;
+}
+
+.c-bg--item {
+  max-width: 75em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/*------------------------------------*\
+  #UTILITIES
+\*------------------------------------*/
+
+.u-text-center {
+  text-align: center;
+}
+
+.u-text-right {
+  text-align: right;
+}
+
+.u-item-center {
+  align-items: center;
+}
+
+.u-item-center-input-field {
+  padding-left: 16px;
+}
+
+.u-margin-input-vlak {
+  margin: 0;
+  margin-bottom: 32px;
+}
+
+.u-no-textdec {
+  text-decoration: none;
+}
+
+/*
+    Utilities: spacing
+    ---
+    Utility classes to put specific margins and paddings onto elements
+*/
+
+.u-margin-clear {
+  margin: 0;
+}
+
+.u-pt-clear {
+  padding-top: 0 !important;
+}
+
+.u-mb-clear {
+  margin-bottom: 0 !important;
+}
+
+.u-mb-xs {
+  margin-bottom: 4px !important;
+}
+
+.u-mb-sm {
+  margin-bottom: 8px !important;
+}
+
+.u-mb-md {
+  margin-bottom: 16px !important;
+}
+
+.u-mb-lg {
+  margin-bottom: 32px !important;
+}
+
+.u-mb-xl {
+  margin-bottom: 48px !important;
+}
+
+/*
+    Utilities: max-width
+    ---
+    Utility classes to put specific max widths onto elements
+*/
+
+.u-max-width-xs {
+  max-width: 18em !important;
+}
+
+.u-max-width-sm {
+  max-width: 39em !important;
+}
+
+.u-max-width-md {
+  max-width: 50em !important;
+}
+
+.u-max-width-lg {
+  max-width: 63.5em !important;
+}
+
+.u-max-width-none {
+  max-width: none !important;
+}
+
+/*
+    Utility: Widths
+    ---
+    Utility classes to put specific widths onto elements
+    Will be mostly used on o-layout__item
+*/
+
+.u-width-auto {
+  width: auto !important;
+}
+
+.u-1-of-1 {
+  width: 100% !important;
+}
+
+.u-1-of-2 {
+  width: 50% !important;
+}
+
+.u-1-of-3 {
+  width: 33.3333333333% !important;
+}
+
+.u-2-of-3 {
+  width: 66.6666666667% !important;
+}
+
+.u-1-of-4 {
+  width: 25% !important;
+}
+
+.u-3-of-4 {
+  width: 75% !important;
+}
+
+.u-1-of-5 {
+  width: 20% !important;
+}
+
+.u-2-of-5 {
+  width: 40% !important;
+}
+
+.u-3-of-5 {
+  width: 60% !important;
+}
+
+.u-4-of-5 {
+  width: 80% !important;
+}
+
+.u-1-of-6 {
+  width: 16.6666666667% !important;
+}
+
+.u-5-of-6 {
+  width: 83.3333333333% !important;
+}
+
+@media (min-width: 576px) {
+  .u-1-of-2-bp1 {
+    width: 50% !important;
+  }
+  .u-1-of-3-bp1 {
+    width: 33.3333333333% !important;
+  }
+  .u-2-of-3-bp1 {
+    width: 66.6666666667% !important;
+  }
+  .u-1-of-4-bp1 {
+    width: 25% !important;
+  }
+  .u-3-of-4-bp1 {
+    width: 75% !important;
+  }
+  .u-1-of-5-bp1 {
+    width: 20% !important;
+  }
+  .u-2-of-5-bp1 {
+    width: 40% !important;
+  }
+  .u-3-of-5-bp1 {
+    width: 60% !important;
+  }
+  .u-4-of-5-bp1 {
+    width: 80% !important;
+  }
+  .u-1-of-6-bp1 {
+    width: 16.6666666667% !important;
+  }
+  .u-5-of-6-bp1 {
+    width: 83.3333333333% !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .u-1-of-2-bp2 {
+    width: 50% !important;
+  }
+  .u-1-of-3-bp2 {
+    width: 33.3333333333% !important;
+  }
+  .u-2-of-3-bp2 {
+    width: 66.6666666667% !important;
+  }
+  .u-1-of-4-bp2 {
+    width: 25% !important;
+  }
+  .u-3-of-4-bp2 {
+    width: 75% !important;
+  }
+  .u-1-of-5-bp2 {
+    width: 20% !important;
+  }
+  .u-2-of-5-bp2 {
+    width: 40% !important;
+  }
+  .u-3-of-5-bp2 {
+    width: 60% !important;
+  }
+  .u-4-of-5-bp2 {
+    width: 80% !important;
+  }
+  .u-1-of-6-bp2 {
+    width: 16.6666666667% !important;
+  }
+  .u-5-of-6-bp2 {
+    width: 83.3333333333% !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .u-1-of-2-bp3 {
+    width: 50% !important;
+  }
+  .u-1-of-3-bp3 {
+    width: 33.3333333333% !important;
+  }
+  .u-2-of-3-bp3 {
+    width: 66.6666666667% !important;
+  }
+  .u-1-of-4-bp3 {
+    width: 25% !important;
+  }
+  .u-3-of-4-bp3 {
+    width: 75% !important;
+  }
+  .u-1-of-5-bp3 {
+    width: 20% !important;
+  }
+  .u-2-of-5-bp3 {
+    width: 40% !important;
+  }
+  .u-3-of-5-bp3 {
+    width: 60% !important;
+  }
+  .u-4-of-5-bp3 {
+    width: 80% !important;
+  }
+  .u-1-of-6-bp3 {
+    width: 16.6666666667% !important;
+  }
+  .u-5-of-6-bp3 {
+    width: 83.3333333333% !important;
+  }
+  .u-2-of-9-bp3 {
+    width: 27.2222222222% !important;
+  }
+  .u-3-of-9-bp3 {
+    width: 33.3333333333% !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .u-1-of-2-bp4 {
+    width: 50% !important;
+  }
+  .u-1-of-3-bp4 {
+    width: 33.3333333333% !important;
+  }
+  .u-2-of-3-bp4 {
+    width: 66.6666666667% !important;
+  }
+  .u-1-of-4-bp4 {
+    width: 25% !important;
+  }
+  .u-3-of-4-bp4 {
+    width: 75% !important;
+  }
+  .u-1-of-5-bp4 {
+    width: 20% !important;
+  }
+  .u-2-of-5-bp4 {
+    width: 40% !important;
+  }
+  .u-3-of-5-bp4 {
+    width: 60% !important;
+  }
+  .u-4-of-5-bp4 {
+    width: 80% !important;
+  }
+  .u-1-of-6-bp4 {
+    width: 16.6666666667% !important;
+  }
+  .u-5-of-6-bp4 {
+    width: 83.3333333333% !important;
+  }
+}
+
+/*------------------------------------*\
+  #MEDIA
+\*------------------------------------*/
+
+/*
+    Media Queries
+    ---
+    EXAMPLE Media Queries for Responsive Design.
+    These examples override the primary ('mobile first') styles.
+    USE THEM INLINE!
+*/
+
+/* Extra small devices (portrait phones, less than 576px)
+   No media query since this is the default in mobile first design
+*/
+
+/* Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) {}
+*/
+
+/* Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {}
+*/
+
+/* Large devices (landscape tablets, desktops, 992px and up)
+@media (min-width: 992px) {}
+*/
+
+/* Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {}
+*/
+
+/*
+    Print styles.
+    ---
+    Inlined to avoid the additional HTTP request:
+    http://www.phpied.com/delay-loading-your-print-css/
+*/
+
+@media print {
+  *,
+  *:before,
+  *:after {
+    background: transparent !important;
+    color: #000 !important;
+    /* Black prints faster: http://www.sanbeiji.com/archives/953 */
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+  a[href]:after {
+    content: ' (' attr(href) ')';
+  }
+  abbr[title]:after {
+    content: ' (' attr(title) ')';
+  }
+  /*
+     * Don't show links that are fragment identifiers,
+     * or use the `javascript:` pseudo protocol
+     */
+  a[href^='#']:after,
+  a[href^='javascript:']:after {
+    content: '';
+  }
+  pre {
+    white-space: pre-wrap !important;
+  }
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+  /*
+     * Printing Tables:
+     * http://css-discuss.incutio.com/wiki/Printing_Tables
+     */
+  thead {
+    display: table-header-group;
+  }
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+}

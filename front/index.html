@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+  <!--<![endif]-->
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>SmartBike</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="js/login.js"></script>
+    <script src="js/dataHandler.js"></script>
+    <script src="js/ip-adres.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
+      integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I="
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="css/screen.css" />
+    <link rel="stylesheet" href="css/normalize.css" />
+  </head>
+  <body>
+    <div class="o-row">
+
+            <div class="o-layout o-layout--justify-center">
+                    <div class="o-layout__item u-1-of-2-bp3">
+                      <h1 class="t-title u-text-center">Smartbike</h1>
+                    </div>
+                  </div>
+                  
+      <div class="o-container--account">
+
+        <form>
+        <div class="o-section">
+        <div class="o-layout o-layout--justify-center">
+            
+          <div class="o-layout__item u-1-of-2-bp3 u-mb-xl">
+            <h3 class="u-text-center title-account">Log je in op de site</h3>
+          </div>
+            <div class="o-layout__item--account-input">
+                <div class="u-margin-input-vlak">
+            <input class="o-text-input-field u-item-center-input-field" type="text" id="email" name="email" placeholder="E-mailadres/User" />
+                </div>
+                <div class="u-margin-input-vlak ">
+            <input class="o-text-input-field u-item-center-input-field" type="password" id="password" name="password" placeholder="Wachtwoord" />
+        </div>
+            </div>
+            <div class="o-layout__item u-1-of-1-bp3 c-status-message" id="status-message">
+            </div>
+            <div class="o-layout__item u-1-of-1-bp3 o-button-center o-margin-button">
+            <input id="aanmelden" class="c-link-button" name="aanmelden" type="button" value="aanmelden" onmouseover="" style="cursor: pointer;"/>
+            </div>
+
+            <div class="o-layout__item c-status-message-beurs" id="status-message-beurs">
+                <p><strong>Login met</strong></p>
+                <p>User: Posterbeurs</p>
+                <p>Wachtwoord: Posterbeurs</p>
+              </div>
+
+            <div class="o-layout--item u-1-of-1-bp3">
+                <hr class="o-hr">
+            </div>
+
+
+        </div>
+        </div>
+      </form>
+
+
+            <div class="o-section">
+            <div class="o-layout o-layout--justify-center">
+
+            <div class="o-layout__item u-1-of-2-bp3">
+            <h3 class="u-text-center">Of maak een account aan</h3>
+            </div>
+            <div class="o-layout__item u-1-of-1-bp3 o-button-center o-margin-button">
+            <a href="account-aanmaken.html"><input id="aanmaken" class="c-link-button" name="aanmaken" type="button" value="aanmaken" onmouseover="" style="cursor: pointer;"/></a>
+            </div>
+          </div>
+        </div>
+
+        </div>
+
+        </div>
+    </div>
+    </div>
+
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

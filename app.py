@@ -13,25 +13,32 @@ from model.accelerometer import Accelerometer
 import pynmea2
 import serial
 import threading
+import socket
+import fcntl
+import struct
 
 # server
 app = Flask(__name__)
 CORS(app)
 socketio = SocketIO(app)
-SESSION_TYPE = 'redis'
 
 # modules / classes
 conn = Database(app=app, user='mctkeanu', password='mctkeanu147963$$0', db='smartbike_db')
 lcd = lcd()
 adc = mcp3008()
+
+
 # acc = Accelerometer(0x53, 0x2D, 0x31, 0x32)
 
 # extra
+time.sleep(30)
 ips = check_output(['hostname', '--all-ip-addresses'])
 if str(ips).split(' ')[0].lstrip("\\b\'") == "169.254.10.1":
     lcd.send_message(str(ips).split(' ')[1])
 else:
     lcd.send_message(str(ips).split(' ')[0].lstrip("\\b\'"))
+
+# print(str(ips).split(' ')[0].lstrip("\\b\'"))
 
 # python3.5 /home/keanu/tmp/pycharm_project_301/app.py
 
@@ -105,7 +112,7 @@ def get_value_ldr():
             lcd.send_message(str(ips).split(' ')[1])
         else:
             lcd.init_LCD()
-            lcd.send_message(str(ips).split(' ')[2].lstrip("\\b\'"))
+            lcd.send_message(str(ips).split(' ')[0].lstrip("\\b\'"))
 
 
 def get_gps_values():
@@ -263,10 +270,10 @@ def get_data_graph_time():
             print(timediff.seconds)
             if day in dict_of_time:
                 print("Adding time to day...")
-                dict_of_time[data[i].get('Date').date().strftime("%d %b")] += timediff.seconds
+                dict_of_time[data[i].get('Date').date().strftime("%d %b")] += (timediff.seconds / 60)
             else:
                 print("Adding day to dictionary...")
-                dict_of_time[data[i].get('Date').date().strftime("%d %b")] = timediff.seconds
+                dict_of_time[data[i].get('Date').date().strftime("%d %b")] = (timediff.seconds / 60)
                 print(dict_of_time)
             total_time += timediff.seconds
     sorted_dict = sorted(dict_of_time.items())

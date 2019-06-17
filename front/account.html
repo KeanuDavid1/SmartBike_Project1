@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+  <!--<![endif]-->
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>SmartBike</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="js/dataHandler.js"></script>
+    <script src="js/account.js"></script>
+    <script src='js/ip-adres.js'></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
+      integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I="
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="css/screen.css" />
+    <link rel="stylesheet" href="css/normalize.css" />
+  </head>
+  <body>
+      <div class="o-row">
+        <div class="o-section o-section--lg">
+            <div class="o-container--data-nav">
+              <div class="o-layout">
+                <div class="c-header">
+                  <div class="c-header__logo">
+                    <h2 class="c-logo">Smartbike</h2>
+                  </div>
+                  <div class="c-header__nav">
+                    <nav class="c-nav">
+                      <ul class="o-list c-nav_list o-layout o-layout--justify-end">
+                        <li class="c-nav__item o-layout__item u-1-of-5-bp3">
+                          <a href="data.html" class="c-nav__link u-text-right">Data</a>
+                        </li>
+                        <li class="c-nav__item o-layout__item u-1-of-5-bp3">
+                          <a href="account.html" class="c-nav__link u-text-right">Account</a>
+                        </li>
+                        <li class="c-nav__item o-layout__item u-1-of-5-bp3">
+                          <a class="c-nav__link u-text-right" id="logout-button" onmouseover="" style="cursor: pointer;">Uitloggen</a>
+                        </li>
+                      </ul>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    <div class="o-section o-section--lg">
+        <div class="o-container--account">
+
+            <form>
+            <div class="o-section">
+            <div class="o-layout o-layout--justify-center">
+                
+              <div class="o-layout__item u-1-of-2-bp3">
+                <h2 class="u-text-center c-title-account-page">Account</h2>
+              </div>
+              <div class="o-layout--item u-1-of-1-bp3 u-mb-xl">
+                  <hr class="o-hr">
+              </div>
+
+              <div class="o-layout__item u-1-of-2-bp3 u-mb-lg">
+                  <h3 class="u-text-center title-account u-margin-clear">Jouw gegevens</h3>
+                </div>
+                <div class="o-layout__item--account-input">
+                    <div class="u-margin-input-vlak">
+                <input class="o-text-input-field u-item-center-input-field" type="text" id="email" name="email" placeholder="E-mailadres" required/>
+                    </div>
+                <div class="u-margin-input-vlak ">
+                <input class="o-text-input-field u-item-center-input-field" type="text" id="Fnaam" name="Fnaam" placeholder="Naam" required/>
+              </div>
+
+              <div class="u-margin-input-vlak ">
+                  <input class="o-text-input-field u-item-center-input-field" type="text" id="Vnaam" name="Vnaam" placeholder="Voornaam" required/>
+                </div>
+                <div class="u-margin-input-vlak ">
+                    <input class="o-text-input-field u-item-center-input-field" type="password" id="password" name="password" placeholder="Wachtwoord" required/>
+                  </div>
+                  <div class="u-margin-input-vlak ">
+                      <input class="o-text-input-field u-item-center-input-field" type="password" id="passwordHerhaling" name="passwordHerhaling" placeholder="Wachtwoord herhalen" required/>
+                    </div>
+                </div>
+                <div class="o-layout__item u-1-of-1-bp3 c-status-message" id="status-message">
+                </div>
+                <div class="o-layout__item u-1-of-1-bp3 o-button-center o-margin-button">
+                <input id="aanpassen" class="c-link-button" name="aanpassen" type="button" value="Gegevens aanpassen"/>
+                </div>
+    
+            </div>
+            </div>
+    
+        </form>
+    
+            </div>
+    
+            </div>
+        </div>
+        </div>
+    
+            </div>
+          </div>
+        </div>
+
+        </body>
+</html>
